@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
 
-from backend.app.schemas import Plant, PlantCreate
+from app.schemas import Plant, PlantCreate
 
 router = APIRouter(
     prefix="/plants",

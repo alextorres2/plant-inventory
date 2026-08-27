@@ -5,10 +5,3 @@ export type PlantApi = {
     location: string;
     date_acquired: string;
 };
-
-export type PlantFormData = {
-  name: string;
-  scientificName: string;
-  location: string;
-  acquiredDate: string;
-};
