@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useParams, useNavigate } from 'react-router-dom';
 import type { Plant } from '../types/Plant';
 import PlantForm from '../components/PlantForm';
 import { useState } from 'react';
@@ -6,12 +6,14 @@ import { useState } from 'react';
 type PlantDetailProps = {
     plants: Plant[];
     onUpdatePlant: (updatedPlant: Plant) => void;
+    onDeletePlant: (plantId: number) => void;
 };
 
-function PlantDetail({ plants, onUpdatePlant }: PlantDetailProps) {
+function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps) {
     const { id } = useParams();
     const plant = plants.find((p) => p.id === Number(id));
     const [isEditing, setIsEditing] = useState(false);
+    const navigate = useNavigate();
 
     if (!plant) {
         return (
@@ -44,6 +46,12 @@ function PlantDetail({ plants, onUpdatePlant }: PlantDetailProps) {
             }
             <button onClick={() => setIsEditing(!isEditing)}>
                 {isEditing ? 'Cancel' : 'Edit'}
+            </button>
+            <button onClick={() => {
+                onDeletePlant(plant.id);
+                navigate('/');
+            }}>
+                Delete
             </button>
         </main>
     );

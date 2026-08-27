@@ -24,6 +24,10 @@ function App() {
     );
   }
 
+  function deletePlant(plantId: number) {
+    setPlants(plants.filter((plant) => plant.id !== plantId));
+  }
+
   return (
     <main>
       <BrowserRouter>
@@ -35,7 +39,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home plants={plants} />} />
           <Route path="about" element={<About />} />
-          <Route path="plants/:id" element={<PlantDetail plants={plants} onUpdatePlant={updatePlant} />} />
+          <Route path="plants/:id" element={<PlantDetail plants={plants} onUpdatePlant={updatePlant} onDeletePlant={deletePlant} />} />
           <Route path="plants/new" element={<AddPlant onAddPlant={addPlant} />} />
         </Routes>
       </BrowserRouter>
