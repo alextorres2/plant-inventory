@@ -1,10 +1,11 @@
 import { useState } from 'react';
 import type { Plant } from '../types/Plant';
+import type { PlantFormData } from '../types/PlantFormData';
 
 type PlantFormProps = {
   initialPlant?: Plant;
   submitLabel: string;
-  onSubmit: (plant: Plant) => void;
+  onSubmit: (plant: PlantFormData) => void;
 };
 
 function PlantForm({ initialPlant, submitLabel, onSubmit }: PlantFormProps) {
@@ -22,7 +23,6 @@ function PlantForm({ initialPlant, submitLabel, onSubmit }: PlantFormProps) {
         }
         setError("");
         onSubmit({
-            id: initialPlant?.id || Date.now(),
             name,
             scientificName,
             location,

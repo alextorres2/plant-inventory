@@ -5,27 +5,60 @@ import PlantDetail from './pages/PlantDetail';
 import AddPlant from './pages/AddPlant';
 
 import type { Plant } from './types/Plant';
-import { initialPlants } from './data/plants';
 import { BrowserRouter, Routes, Route, Link } from 'react-router-dom';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
+import { getPlants, createPlant, updatePlant, deletePlant } from './services/plantApi';
+import type { PlantFormData } from './types/PlantFormData';
 
 function App() {
-  const [plants, setPlants] = useState<Plant[]>(initialPlants);
+  const [plants, setPlants] = useState<Plant[]>([]);
+  const [isLoading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string>("");
 
-  function addPlant(plant: Plant) {
-    setPlants([...plants, plant]);
+  useEffect(() => {
+    async function loadPlants() {
+      try {
+        const data = await getPlants();
+        setPlants(data);
+      } catch (error) {
+        console.error('Failed to fetch plants:', error);
+        setError('Failed to fetch plants');
+      } finally {
+        setLoading(false);
+      }
+    }
+    loadPlants();
+  }, []);
+
+  async function handleAddPlant(plant: PlantFormData) {
+    const createdPlant = await createPlant(plant);
+    setPlants((currentPlants) => [...currentPlants, createdPlant]);
   }
 
-  function updatePlant(updatedPlant: Plant) {
-    setPlants(
-      plants.map((plant) => (
-        plant.id === updatedPlant.id ? updatedPlant : plant
-      ))
+  async function handleUpdatePlant(id: number, plant: PlantFormData) {
+    const updatedPlant = await updatePlant(id, plant);
+    setPlants((currentPlants) =>
+      currentPlants.map((currentPlant) =>
+        currentPlant.id === updatedPlant.id
+          ? updatedPlant
+          : currentPlant
+      )
     );
   }
 
-  function deletePlant(plantId: number) {
-    setPlants(plants.filter((plant) => plant.id !== plantId));
+  async function handleDeletePlant(plantId: number) {
+    await deletePlant(plantId);
+    setPlants((currentPlants) => 
+      currentPlants.filter((plant) => plant.id !== plantId)
+    );
+  }
+
+  if (isLoading) {
+    return <p>Loading plants...</p>;
+  }
+
+  if (error) {
+    return <p style={{ color: 'red' }}>{error}</p>;
   }
 
   return (
@@ -39,8 +72,8 @@ function App() {
         <Routes>
           <Route path="/" element={<Home plants={plants} />} />
           <Route path="about" element={<About />} />
-          <Route path="plants/:id" element={<PlantDetail plants={plants} onUpdatePlant={updatePlant} onDeletePlant={deletePlant} />} />
-          <Route path="plants/new" element={<AddPlant onAddPlant={addPlant} />} />
+          <Route path="plants/:id" element={<PlantDetail plants={plants} onUpdatePlant={handleUpdatePlant} onDeletePlant={handleDeletePlant} />} />
+          <Route path="plants/new" element={<AddPlant onAddPlant={handleAddPlant} />} />
         </Routes>
       </BrowserRouter>
     </main>

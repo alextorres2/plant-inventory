@@ -1,24 +1,29 @@
 import { useNavigate } from 'react-router-dom';
-import type { Plant } from '../types/Plant';
+import { useState } from 'react';
+import type { PlantFormData } from '../types/PlantFormData';
 import PlantForm from '../components/PlantForm';
 
 type AddPlantProps = {
-    onAddPlant: (plant: Plant) => void;
+    onAddPlant: (plant: PlantFormData) => Promise<void>;
 };
 
 function AddPlant({ onAddPlant }: AddPlantProps) {
     const navigate = useNavigate();
+    const [error, setError] = useState("");
 
     return (
         <main>
             <h1>Add a New Plant</h1>
             <PlantForm
                 submitLabel="Add Plant"
-                onSubmit={(updatedPlant) => {
-                    onAddPlant(updatedPlant)
-                    navigate('/');
-                }
-            }
+                onSubmit={async (plantData) => {
+                    try {
+                        await onAddPlant(plantData);
+                        navigate('/');
+                    } catch (error) {
+                        setError("Failed to add plant");
+                    }
+                }}
             />
         </main>
     );

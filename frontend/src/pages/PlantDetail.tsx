@@ -1,11 +1,12 @@
 import { useParams, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
 import type { Plant } from '../types/Plant';
 import PlantForm from '../components/PlantForm';
-import { useState } from 'react';
+import type { PlantFormData } from '../types/PlantFormData';
 
 type PlantDetailProps = {
     plants: Plant[];
-    onUpdatePlant: (updatedPlant: Plant) => void;
+    onUpdatePlant: (id: number, updatedPlant: PlantFormData) => void;
     onDeletePlant: (plantId: number) => void;
 };
 
@@ -14,6 +15,7 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
     const plant = plants.find((p) => p.id === Number(id));
     const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
+    const [error, setError] = useState("");
 
     if (!plant) {
         return (
@@ -29,9 +31,13 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
                 <PlantForm
                     initialPlant={plant}
                     submitLabel="Update Plant"
-                    onSubmit={(updatedPlant) => {
-                        onUpdatePlant(updatedPlant);
-                        setIsEditing(false);
+                    onSubmit={(formData) => {
+                        try {
+                            onUpdatePlant(Number(id), formData);
+                            setIsEditing(false);
+                        } catch (error) {
+                            setError("Failed to update plant");
+                        }
                     }}
                 />
             ) : 
@@ -48,8 +54,12 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
                 {isEditing ? 'Cancel' : 'Edit'}
             </button>
             <button onClick={() => {
-                onDeletePlant(plant.id);
-                navigate('/');
+                try {
+                    onDeletePlant(plant.id);
+                    navigate('/');
+                } catch (error) {
+                    setError("Failed to delete plant");
+                }
             }}>
                 Delete
             </button>
