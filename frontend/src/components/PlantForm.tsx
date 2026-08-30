@@ -5,7 +5,7 @@ import type { PlantFormData } from '../types/PlantFormData';
 type PlantFormProps = {
   initialPlant?: Plant;
   submitLabel: string;
-  onSubmit: (plant: PlantFormData) => void;
+  onSubmit: (plant: PlantFormData) => Promise<void>;
 };
 
 function PlantForm({ initialPlant, submitLabel, onSubmit }: PlantFormProps) {
@@ -15,28 +15,35 @@ function PlantForm({ initialPlant, submitLabel, onSubmit }: PlantFormProps) {
     const [acquiredDate, setAcquiredDate] = useState(initialPlant?.acquiredDate || '');
     const [error, setError] = useState("");
 
-    function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
+    async function handleSubmit(event: React.SubmitEvent<HTMLFormElement>) {
         event.preventDefault();
         if (!name.trim() || !scientificName.trim() || !location.trim() || !acquiredDate.trim()) {
             setError("All fields are required.");
             return;
         }
-        setError("");
-        onSubmit({
-            name,
-            scientificName,
-            location,
-            acquiredDate,
-        });
-        setName('');
-        setScientificName('');
-        setLocation('');
-        setAcquiredDate('');
+        try {
+            await onSubmit({
+                name,
+                scientificName,
+                location,
+                acquiredDate,
+            });
+            setName('');
+            setScientificName('');
+            setLocation('');
+            setAcquiredDate('');
+        } catch (err) {
+            setError(err as string);
+        }
     }
 
     return (
         <main>
-            {error && <p className="form-error">{error}</p>}
+            {error && (
+                <div className="form-error">
+                    {error}
+                </div>
+            )}
             <form onSubmit={handleSubmit}>
                 <label>
                     Name:

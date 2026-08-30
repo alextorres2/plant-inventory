@@ -6,8 +6,8 @@ import type { PlantFormData } from '../types/PlantFormData';
 
 type PlantDetailProps = {
     plants: Plant[];
-    onUpdatePlant: (id: number, updatedPlant: PlantFormData) => void;
-    onDeletePlant: (plantId: number) => void;
+    onUpdatePlant: (id: number, updatedPlant: PlantFormData) => Promise<void>;
+    onDeletePlant: (plantId: number) => Promise<void>;
 };
 
 function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps) {
@@ -27,13 +27,18 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
 
     return (
         <main>
+            {error && (
+                <div role="alert" style={{ color: 'red' }}>
+                    {error}
+                </div>
+            )}
             {isEditing ? (
                 <PlantForm
                     initialPlant={plant}
                     submitLabel="Update Plant"
-                    onSubmit={(formData) => {
+                    onSubmit={async (formData) => {
                         try {
-                            onUpdatePlant(Number(id), formData);
+                            await onUpdatePlant(Number(id), formData);
                             setIsEditing(false);
                         } catch (error) {
                             setError("Failed to update plant");
@@ -53,9 +58,9 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
             <button onClick={() => setIsEditing(!isEditing)}>
                 {isEditing ? 'Cancel' : 'Edit'}
             </button>
-            <button onClick={() => {
+            <button onClick={async () => {
                 try {
-                    onDeletePlant(plant.id);
+                    await onDeletePlant(plant.id);
                     navigate('/');
                 } catch (error) {
                     setError("Failed to delete plant");

@@ -37,8 +37,12 @@ def get_plant(plant_id: int):
 
 @router.post("/", response_model=Plant)
 def create_plant(plant: PlantCreate):
+    new_id = max(
+        (plant.id for plant in plants),
+        default=0
+    ) + 1
     new_plant = Plant(
-        id=len(plants) + 1,
+        id=new_id,
         name=plant.name,
         species=plant.species,
         location=plant.location,
