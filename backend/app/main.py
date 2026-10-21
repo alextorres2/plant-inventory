@@ -4,6 +4,10 @@ from fastapi.middleware.cors import CORSMiddleware
 from app.schemas import Plant, PlantCreate
 from app.routers import plants
 
+from app.database import Base, engine
+from app import models
+
+Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
 

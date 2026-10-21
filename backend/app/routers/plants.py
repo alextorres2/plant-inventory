@@ -1,6 +1,7 @@
-from fastapi import APIRouter, HTTPException
-
-from app.schemas import Plant, PlantCreate
+from fastapi import APIRouter, HTTPException, Depends
+from app.database import get_db
+from app import models
+from app.schemas import Plant as PlantSchema, PlantCreate
 
 router = APIRouter(
     prefix="/plants",
@@ -24,9 +25,9 @@ plants: list[Plant] = [
     ),
 ]
 
-@router.get("/", response_model=list[Plant])
-def get_plants():
-    return plants
+@router.get("/", response_model=list[PlantSchema])
+def get_plants(db: Session = Depends(get_db)):
+    return db.query(models.Plant).all()
 
 @router.get("/{plant_id}")
 def get_plant(plant_id: int):
