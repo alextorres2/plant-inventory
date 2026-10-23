@@ -1,3 +1,5 @@
+import os
+
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 
@@ -12,7 +14,12 @@ Base.metadata.create_all(bind=engine)
 app = FastAPI()
 
 origins = [
-    "http://localhost:5173",
+    origin.strip()
+    for origin in os.getenv(
+        "PLANT_INVENTORY_CORS_ORIGINS",
+        "http://localhost:5173",
+    ).split(",")
+    if origin.strip()
 ]
 
 app.add_middleware(

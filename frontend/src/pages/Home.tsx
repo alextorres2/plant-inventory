@@ -26,7 +26,7 @@ function Home({ plants }: { plants: Plant[] }) {
   }
 
   return (
-    <main>
+    <main className="page-content">
       <h1>My Plants</h1>
       <section className="plant-filters" aria-label="Filter plants">
         <label>
@@ -66,7 +66,6 @@ function Home({ plants }: { plants: Plant[] }) {
           <Link
             key={plant.id}
             to={`/plants/${plant.id}`}
-            style={{ textDecoration: 'none', color: 'inherit' }}
           >
             <PlantCard plant={plant} />
           </Link>

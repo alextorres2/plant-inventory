@@ -54,20 +54,23 @@ function App() {
   }
 
   if (isLoading) {
-    return <p>Loading plants...</p>;
+    return <main className="page-content status-message" role="status">Loading plants...</main>;
   }
 
   if (error) {
-    return <p style={{ color: 'red' }}>{error}</p>;
+    return <main className="page-content status-message error-message" role="alert">{error}</main>;
   }
 
   return (
-    <main>
-      <BrowserRouter>
-        <nav>
-          <Link to="/">Home</Link> |{" "}
-          <Link to="/plants/new">Add Plant</Link> |{" "}
-          <Link to="/about">About</Link>
+    <BrowserRouter>
+      <div className="app-shell">
+        <nav className="site-nav" aria-label="Main navigation">
+          <Link className="site-brand" to="/">Plant Inventory</Link>
+          <div className="site-nav-links">
+            <Link to="/">Home</Link>
+            <Link to="/plants/new">Add Plant</Link>
+            <Link to="/about">About</Link>
+          </div>
         </nav>
         <Routes>
           <Route path="/" element={<Home plants={plants} />} />
@@ -75,8 +78,8 @@ function App() {
           <Route path="plants/:id" element={<PlantDetail plants={plants} onUpdatePlant={handleUpdatePlant} onDeletePlant={handleDeletePlant} />} />
           <Route path="plants/new" element={<AddPlant onAddPlant={handleAddPlant} />} />
         </Routes>
-      </BrowserRouter>
-    </main>
+      </div>
+    </BrowserRouter>
   );
 }
 

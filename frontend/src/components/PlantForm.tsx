@@ -60,15 +60,16 @@ function PlantForm({ initialPlant, submitLabel, onSubmit, onPendingChange, disab
     }
 
     return (
-        <main>
+        <div className="plant-form">
             {error && (
                 <div className="form-error" role="alert">
                     {error}
                 </div>
             )}
             <form onSubmit={handleSubmit}>
-                <label>
-                    Name:
+                <div className="form-fields">
+                    <label className="form-field">
+                    Name
                     <input
                         type="text"
                         value={name}
@@ -76,10 +77,9 @@ function PlantForm({ initialPlant, submitLabel, onSubmit, onPendingChange, disab
                         disabled={isSubmitting || disabled}
                         required
                     />
-                </label>
-                <br />
-                <label>
-                    Scientific Name:
+                    </label>
+                    <label className="form-field">
+                    Scientific name
                     <input
                         type="text"
                         value={scientificName}
@@ -87,10 +87,9 @@ function PlantForm({ initialPlant, submitLabel, onSubmit, onPendingChange, disab
                         disabled={isSubmitting || disabled}
                         required
                     />
-                </label>
-                <br />
-                <label>
-                    Location:
+                    </label>
+                    <label className="form-field">
+                    Location
                     <input
                         type="text"
                         value={location}
@@ -98,10 +97,9 @@ function PlantForm({ initialPlant, submitLabel, onSubmit, onPendingChange, disab
                         disabled={isSubmitting || disabled}
                         required
                     />
-                </label>
-                <br />
-                <label>
-                    Acquired Date:
+                    </label>
+                    <label className="form-field">
+                    Acquired date
                     <input
                         type="date"
                         value={acquiredDate}
@@ -109,13 +107,13 @@ function PlantForm({ initialPlant, submitLabel, onSubmit, onPendingChange, disab
                         disabled={isSubmitting || disabled}
                         required
                     />
-                </label>
-                <br />
-                <button type="submit" disabled={isSubmitting || disabled}>
+                    </label>
+                </div>
+                <button className="form-submit" type="submit" disabled={isSubmitting || disabled}>
                     {isSubmitting ? 'Saving...' : submitLabel}
                 </button>
             </form>
-        </main>
+        </div>
     )
 }
 

@@ -44,16 +44,16 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
 
     if (!plant) {
         return (
-            <main>
+            <main className="page-content">
                 <h1>Plant not found</h1>
             </main>
         );
     }
 
     return (
-        <main>
+        <main className="page-content">
             {error && (
-                <div role="alert" style={{ color: 'red' }}>
+                <div className="form-error" role="alert">
                     {error}
                 </div>
             )}
@@ -70,26 +70,28 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
                 />
             ) : 
             (
-                <div>
+                <section className="detail-card">
                     <h1>{plant.name}</h1>
                     <p><em>{plant.scientificName}</em></p>
                     <p>Location: {plant.location}</p>
                     <p>Acquired Date: {plant.acquiredDate}</p>
-                </div>
+                </section>
             )
             }
-            <button
-                onClick={() => {
-                    setError('');
-                    setIsEditing(!isEditing);
-                }}
-                disabled={isUpdating || isDeleting}
-            >
-                {isEditing ? 'Cancel' : 'Edit'}
-            </button>
-            <button onClick={handleDelete} disabled={isUpdating || isDeleting}>
-                {isDeleting ? 'Deleting...' : 'Delete'}
-            </button>
+            <div className="detail-actions">
+                <button
+                    onClick={() => {
+                        setError('');
+                        setIsEditing(!isEditing);
+                    }}
+                    disabled={isUpdating || isDeleting}
+                >
+                    {isEditing ? 'Cancel' : 'Edit'}
+                </button>
+                <button className="danger-button" onClick={handleDelete} disabled={isUpdating || isDeleting}>
+                    {isDeleting ? 'Deleting...' : 'Delete'}
+                </button>
+            </div>
         </main>
     );
 }

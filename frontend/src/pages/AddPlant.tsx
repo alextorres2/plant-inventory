@@ -10,7 +10,7 @@ function AddPlant({ onAddPlant }: AddPlantProps) {
     const navigate = useNavigate();
 
     return (
-        <main>
+        <main className="page-content">
             <h1>Add a New Plant</h1>
             <PlantForm
                 submitLabel="Add Plant"

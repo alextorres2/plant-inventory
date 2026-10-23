@@ -2,39 +2,49 @@
   display: flex;
   flex-wrap: wrap;
   align-items: end;
-  justify-content: center;
+  justify-content: flex-start;
   gap: 12px;
   margin: 0 auto 16px;
-  padding: 0 16px;
 }
 
 .plant-filters label {
   display: grid;
+  flex: 1 1 220px;
+  min-width: 0;
   gap: 4px;
   text-align: left;
+  color: var(--heading);
+  font-weight: 600;
 }
 
 .plant-filters input,
 .plant-filters select,
 .plant-filters button {
-  min-height: 40px;
-  padding: 8px 12px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  color: var(--text-h);
-  background: var(--bg);
-  font: inherit;
+  min-width: 0;
 }
 
 .plant-filters button {
+  flex: 0 0 auto;
   cursor: pointer;
 }
 
-.plant-filters button:disabled {
-  cursor: not-allowed;
-  opacity: 0.6;
+.plant-result-count {
+  margin: 0 0 16px;
+  color: var(--text-muted);
 }
 
-.plant-result-count {
-  margin-bottom: 16px;
+@media (max-width: 600px) {
+  .plant-filters {
+    align-items: stretch;
+    flex-direction: column;
+  }
+
+  .plant-filters label,
+  .plant-filters button {
+    width: 100%;
+  }
+
+  .plant-filters label {
+    flex: 0 1 auto;
+  }
 }
