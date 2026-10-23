@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from 'react-router-dom';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import type { Plant } from '../types/Plant';
 import PlantForm from '../components/PlantForm';
 import type { PlantFormData } from '../types/PlantFormData';
@@ -16,6 +16,31 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
     const [isEditing, setIsEditing] = useState(false);
     const navigate = useNavigate();
     const [error, setError] = useState("");
+    const [isUpdating, setIsUpdating] = useState(false);
+    const [isDeleting, setIsDeleting] = useState(false);
+    const deletionInProgress = useRef(false);
+
+    async function handleDelete() {
+        if (deletionInProgress.current || isUpdating) return;
+
+        deletionInProgress.current = true;
+        setIsDeleting(true);
+        setError('');
+        try {
+            await onDeletePlant(plant!.id);
+            navigate('/');
+        } catch (caught: unknown) {
+            const message = caught instanceof Error
+                ? caught.message
+                : typeof caught === 'string'
+                    ? caught
+                    : '';
+            setError(message.trim() || 'Unable to delete the plant. Please try again.');
+        } finally {
+            deletionInProgress.current = false;
+            setIsDeleting(false);
+        }
+    }
 
     if (!plant) {
         return (
@@ -36,13 +61,11 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
                 <PlantForm
                     initialPlant={plant}
                     submitLabel="Update Plant"
+                    disabled={isDeleting}
+                    onPendingChange={setIsUpdating}
                     onSubmit={async (formData) => {
-                        try {
-                            await onUpdatePlant(Number(id), formData);
-                            setIsEditing(false);
-                        } catch (error) {
-                            setError("Failed to update plant");
-                        }
+                        await onUpdatePlant(Number(id), formData);
+                        setIsEditing(false);
                     }}
                 />
             ) : 
@@ -55,18 +78,17 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
                 </div>
             )
             }
-            <button onClick={() => setIsEditing(!isEditing)}>
+            <button
+                onClick={() => {
+                    setError('');
+                    setIsEditing(!isEditing);
+                }}
+                disabled={isUpdating || isDeleting}
+            >
                 {isEditing ? 'Cancel' : 'Edit'}
             </button>
-            <button onClick={async () => {
-                try {
-                    await onDeletePlant(plant.id);
-                    navigate('/');
-                } catch (error) {
-                    setError("Failed to delete plant");
-                }
-            }}>
-                Delete
+            <button onClick={handleDelete} disabled={isUpdating || isDeleting}>
+                {isDeleting ? 'Deleting...' : 'Delete'}
             </button>
         </main>
     );
