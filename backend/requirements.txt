@@ -1,5 +1,7 @@
 annotated-doc==0.0.5
 annotated-types==0.8.0
+alembic==1.15.2
+av==14.2.0
 anyio==4.14.2
 click==8.5.0
 fastapi==0.141.1
@@ -10,6 +12,9 @@ idna==3.19
 psycopg2-binary==2.9.12
 pydantic==2.13.4
 pydantic_core==2.46.4
+Pillow==11.1.0
+pillow-heif==0.21.0
+python-multipart==0.0.20
 python-dotenv==1.2.3
 PyYAML==6.0.3
 SQLAlchemy==2.0.52

@@ -2,15 +2,17 @@ import { useParams, useNavigate } from 'react-router-dom';
 import { useRef, useState } from 'react';
 import type { Plant } from '../types/Plant';
 import PlantForm from '../components/PlantForm';
+import PlantPhotos from '../components/PlantPhotos';
 import type { PlantFormData } from '../types/PlantFormData';
 
 type PlantDetailProps = {
     plants: Plant[];
     onUpdatePlant: (id: number, updatedPlant: PlantFormData) => Promise<void>;
     onDeletePlant: (plantId: number) => Promise<void>;
+    onPlantPhotosChanged: () => Promise<void>;
 };
 
-function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps) {
+function PlantDetail({ plants, onUpdatePlant, onDeletePlant, onPlantPhotosChanged }: PlantDetailProps) {
     const { id } = useParams();
     const plant = plants.find((p) => p.id === Number(id));
     const [isEditing, setIsEditing] = useState(false);
@@ -92,6 +94,7 @@ function PlantDetail({ plants, onUpdatePlant, onDeletePlant }: PlantDetailProps)
                     {isDeleting ? 'Deleting...' : 'Delete'}
                 </button>
             </div>
+            <PlantPhotos plantId={plant.id} canEdit={isEditing} onPhotosChanged={onPlantPhotosChanged} />
         </main>
     );
 }

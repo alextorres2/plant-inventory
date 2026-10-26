@@ -53,6 +53,11 @@ function App() {
     );
   }
 
+  async function handlePlantPhotosChanged() {
+    const refreshedPlants = await getPlants();
+    setPlants(refreshedPlants);
+  }
+
   if (isLoading) {
     return <main className="page-content status-message" role="status">Loading plants...</main>;
   }
@@ -75,7 +80,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home plants={plants} />} />
           <Route path="about" element={<About />} />
-          <Route path="plants/:id" element={<PlantDetail plants={plants} onUpdatePlant={handleUpdatePlant} onDeletePlant={handleDeletePlant} />} />
+          <Route path="plants/:id" element={<PlantDetail plants={plants} onUpdatePlant={handleUpdatePlant} onDeletePlant={handleDeletePlant} onPlantPhotosChanged={handlePlantPhotosChanged} />} />
           <Route path="plants/new" element={<AddPlant onAddPlant={handleAddPlant} />} />
         </Routes>
       </div>

@@ -4,4 +4,12 @@ export type PlantApi = {
     species: string;
     location: string;
     date_acquired: string;
+    latest_photo_url?: string | null;
+};
+
+export type PlantPhotoApi = {
+    id: number;
+    date_taken: string;
+    caption: string | null;
+    image_url: string;
 };

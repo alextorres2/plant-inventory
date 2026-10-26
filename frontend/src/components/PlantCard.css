@@ -27,6 +27,33 @@
   font-weight: 700;
 }
 
+.plant-card-thumbnail,
+.plant-card-placeholder {
+  display: grid;
+  width: 100%;
+  aspect-ratio: 16 / 10;
+  margin-bottom: 16px;
+  overflow: hidden;
+  border-radius: 10px;
+}
+
+.plant-card-thumbnail {
+  object-fit: cover;
+}
+
+.plant-card-placeholder {
+  place-content: center;
+  gap: 4px;
+  background: var(--accent-soft);
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.plant-card-placeholder span:first-child {
+  font-size: 2rem;
+}
+
 .plant-card p:nth-child(2) {
   color: var(--text-muted);
 }

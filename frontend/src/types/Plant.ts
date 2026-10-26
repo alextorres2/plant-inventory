@@ -4,4 +4,5 @@ export type Plant = {
     scientificName: string;
     location: string;
     acquiredDate: string;
+    latestPhotoUrl?: string | null;
 }
